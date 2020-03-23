@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/mman.h>
 
 typedef struct {
   unsigned long size, resident, share, text, lib, data, dt;
@@ -32,20 +32,16 @@ int main(int argc, char **argv) {
     perror("could not open statm");
     abort();
   }
-  
-  // lock all the pages in memory, so we wont swap
-  // mlockall(MCL_FUTURE );
 
   char *current_pointer = 0;
   unsigned long current_size = sizeof(char) * block_size_byte;
-  for (int i = 0; i < 10; i++) {
-  //  while (1) {
+  // for (int i = 0; i < 10; i++) {
+  while (1) {
     current_pointer = realloc(current_pointer, current_size);
     if (current_pointer == 0) {
       perror("malloc failed");
       abort();
     }
-//    memset(current_pointer, 1, current_size);
     sleep(1);
 
     if (7 != fscanf(f, "%ld %ld %ld %ld %ld %ld %ld", &result.size,
@@ -55,7 +51,8 @@ int main(int argc, char **argv) {
       abort();
     }
     printf("Current memory in GB %f\n", (double)result.size / 1024.0 / 1024.0);
-    printf("%ld %ld %ld %ld %ld %ld \n", result.resident, result.share, result.text, result.lib, result.data, result.dt);
+    printf("%ld %ld %ld %ld %ld %ld \n", result.resident, result.share,
+           result.text, result.lib, result.data, result.dt);
     fseek(f, 0, 0);
     current_size += sizeof(char) * block_size_byte;
   }
