@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testmemory
+spec:
+      containers:
+      - name: testmemory
+        image: jinajita/testmemory:latest
+        imagePullPolicy: Always 
+      restartPolicy: Never
+      
