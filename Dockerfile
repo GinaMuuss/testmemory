@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 # install dependencies and utilites
 RUN apt update
-RUN apt install -y vim htop gcc
+RUN apt install -y vim htop gcc make
 
 RUN mkdir /test
 
